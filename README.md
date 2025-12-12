@@ -5,18 +5,21 @@
 ```mermaid
 graph TD
 subgraph AWS
-   S3Raw["S3 Bucket Raw Data"]
+   S3Raw["S3 Bucket Raw Data (FASTQ, BAM, CRAM, VCF, PLINK)"]
    S3Processed["S3 Bucket Processed Data"]
-   ECR["ECR Docker Images"]
-   Batch["AWS Batch Fargate Spot"]
+   ECR["ECR Docker Images (samtools, bcftools, htslib, plink, python)"]
+   Batch["AWS Batch Fargate Spot\n(Bioinformatics Tools, Python)"]
    StepFn["Step Functions State Machine"]
    LambdaQC["Lambda Quality Check"]
+   PCAReduction["Batch/SageMaker/EMR: PCA & Data Reduction"]
 end
 User((User))
 User-->|Upload or Trigger|S3Raw
 StepFn-->|Trigger Batch Job|Batch
-Batch-->|Reads or Writes|S3Raw
+Batch-->|Reads/Writes|S3Raw
 Batch-->|Writes|S3Processed
+Batch-->|Runs PCA/Data Reduction|PCAReduction
+PCAReduction-->|Outputs|S3Processed
 StepFn-->|Invoke|LambdaQC
 LambdaQC-->|QC Results|S3Processed
 ```
@@ -26,9 +29,9 @@ LambdaQC-->|QC Results|S3Processed
 ```mermaid
 flowchart TD
 A[Start S3 Upload or Trigger] --> B[Step Functions Data Download]
-B --> C[Step Functions BWA Alignment Batch]
-C --> D[Step Functions Quality Check Lambda]
-D --> E[End Processed Data in S3]
+B --> C[Batch: Alignment/QC/Variant (samtools, bcftools, htslib, plink)]
+C --> D[Batch/SageMaker/EMR: PCA & Data Reduction]
+D --> E[End Processed Data in S3 (VCF, PLINK, PCA)]
 C -- Error --> F[Fail State]
 D -- Error --> F
 ```
