@@ -34,6 +34,20 @@ flowchart TD
 
 This project demonstrates a professional-grade ETL pipeline for genomic data using AWS CDK, Docker, AWS Batch, and Step Functions.
 
+## ETL Workflow Diagram
+
+```mermaid
+flowchart TD
+      A[Start: S3 Upload or Trigger] --> B[Step Functions: Data Download]
+      B --> C[Step Functions: BWA Alignment (Batch)]
+      C --> D[Step Functions: Quality Check (Lambda)]
+      D --> E[End: Processed Data in S3]
+      C -- Error --> F[Fail State]
+      D -- Error --> F
+```
+
+This project demonstrates a professional-grade ETL pipeline for genomic data using AWS CDK, Docker, AWS Batch, and Step Functions.
+
 ## Project Structure
 ```
 genomics-pipeline-cdk/
