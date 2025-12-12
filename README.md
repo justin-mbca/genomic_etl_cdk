@@ -4,32 +4,32 @@
 ## Architecture Diagram
 ```mermaid
 graph TD
-   subgraph AWS
-      S3Raw["S3 Bucket: Raw Data"]
-      S3Processed["S3 Bucket: Processed Data"]
-      ECR["ECR: Docker Images"]
-      Batch["AWS Batch (Fargate Spot)"]
-      StepFn["Step Functions State Machine"]
-      LambdaQC["Lambda: Quality Check"]
-   end
-   User((User))
-   User-->|Upload/Trigger|S3Raw
-   StepFn-->|Trigger Batch Job|Batch
-   Batch-->|Reads/Writes|S3Raw
-   Batch-->|Writes|S3Processed
-   StepFn-->|Invoke|LambdaQC
-   LambdaQC-->|QC Results|S3Processed
+subgraph AWS
+  S3Raw["S3 Bucket: Raw Data"]
+  S3Processed["S3 Bucket: Processed Data"]
+  ECR["ECR: Docker Images"]
+  Batch["AWS Batch (Fargate Spot)"]
+  StepFn["Step Functions State Machine"]
+  LambdaQC["Lambda: Quality Check"]
+end
+User((User))
+User-->|Upload/Trigger|S3Raw
+StepFn-->|Trigger Batch Job|Batch
+Batch-->|Reads/Writes|S3Raw
+Batch-->|Writes|S3Processed
+StepFn-->|Invoke|LambdaQC
+LambdaQC-->|QC Results|S3Processed
 ```
 
 ## ETL Workflow Diagram
 ```mermaid
 flowchart TD
-   A[Start: S3 Upload or Trigger] --> B[Step Functions: Data Download]
-   B --> C[Step Functions: BWA Alignment (Batch)]
-   C --> D[Step Functions: Quality Check (Lambda)]
-   D --> E[End: Processed Data in S3]
-   C -- Error --> F[Fail State]
-   D -- Error --> F
+A[Start: S3 Upload or Trigger] --> B[Step Functions: Data Download]
+B --> C[Step Functions: BWA Alignment (Batch)]
+C --> D[Step Functions: Quality Check (Lambda)]
+D --> E[End: Processed Data in S3]
+C -- Error --> F[Fail State]
+D -- Error --> F
 ```
 
 ## Common Genomics Pipelines
@@ -37,29 +37,29 @@ flowchart TD
 ### 1. Raw Data Ingestion & QC Pipeline
 ```mermaid
 flowchart TD
-   A[Sequencer Output (FASTQ)] --> B[Upload to S3 Raw Bucket]
-   B --> C[Lambda: Initial QC]
-   C --> D[QC Results to S3/DB]
-   C -- Fail --> E[Notify/Alert]
+A[Sequencer Output (FASTQ)] --> B[Upload to S3 Raw Bucket]
+B --> C[Lambda: Initial QC]
+C --> D[QC Results to S3/DB]
+C -- Fail --> E[Notify/Alert]
 ```
 
 ### 2. Alignment & Variant Calling Pipeline
 ```mermaid
 flowchart TD
-   A[QC-Passed FASTQ in S3] --> B[Batch: BWA Alignment]
-   B --> C[Batch: Sort & Index (samtools)]
-   C --> D[Batch: Variant Calling (bcftools)]
-   D --> E[VCF Output to S3 Processed]
-   D -- Error --> F[Fail State]
+A[QC-Passed FASTQ in S3] --> B[Batch: BWA Alignment]
+B --> C[Batch: Sort & Index (samtools)]
+C --> D[Batch: Variant Calling (bcftools)]
+D --> E[VCF Output to S3 Processed]
+D -- Error --> F[Fail State]
 ```
 
 ### 3. Data Aggregation & Analytics Pipeline
 ```mermaid
 flowchart TD
-   A[VCF Files in S3] --> B[Athena Table Creation]
-   B --> C[Query with Athena/Glue]
-   C --> D[Results to QuickSight Dashboard]
-   C --> E[Export to Downstream Consumers]
+A[VCF Files in S3] --> B[Athena Table Creation]
+B --> C[Query with Athena/Glue]
+C --> D[Results to QuickSight Dashboard]
+C --> E[Export to Downstream Consumers]
 ```
 
 This project demonstrates a professional-grade ETL pipeline for genomic data using AWS CDK, Docker, AWS Batch, and Step Functions.
