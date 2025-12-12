@@ -32,6 +32,36 @@ flowchart TD
    D -- Error --> F
 ```
 
+## Common Genomics Pipelines
+
+### 1. Raw Data Ingestion & QC Pipeline
+```mermaid
+flowchart TD
+   A[Sequencer Output (FASTQ)] --> B[Upload to S3 Raw Bucket]
+   B --> C[Lambda: Initial QC]
+   C --> D[QC Results to S3/DB]
+   C -- Fail --> E[Notify/Alert]
+```
+
+### 2. Alignment & Variant Calling Pipeline
+```mermaid
+flowchart TD
+   A[QC-Passed FASTQ in S3] --> B[Batch: BWA Alignment]
+   B --> C[Batch: Sort & Index (samtools)]
+   C --> D[Batch: Variant Calling (bcftools)]
+   D --> E[VCF Output to S3 Processed]
+   D -- Error --> F[Fail State]
+```
+
+### 3. Data Aggregation & Analytics Pipeline
+```mermaid
+flowchart TD
+   A[VCF Files in S3] --> B[Athena Table Creation]
+   B --> C[Query with Athena/Glue]
+   C --> D[Results to QuickSight Dashboard]
+   C --> E[Export to Downstream Consumers]
+```
+
 This project demonstrates a professional-grade ETL pipeline for genomic data using AWS CDK, Docker, AWS Batch, and Step Functions.
 
 
