@@ -1,3 +1,10 @@
+---
+
+## Portfolio Project Summary
+
+Clinico-Genomic Data Pipeline — Cloud Genomics Portfolio (2025) GitHub: github.com/justin-mbca/genomic_etl_cdk Built a production-scale genomics ETL pipeline on AWS (CDK, Batch, Step Functions, Docker) supporting large-scale genetic data formats (VCF, BAM, CRAM, PLINK). Automated workflows leverage industry-standard bioinformatics tools (samtools, bcftools, htslib, plink) and Python for data parsing, QC, and variant analysis. Integrated PCA and data-reduction steps using Batch, SageMaker, or EMR for scalable analytics. Enabled secure, cost-optimized, and reproducible processing with robust error handling and monitoring. Documented and visualized end-to-end pipelines for technical interviews and stakeholder review.
+
+---
 
 # Clinico-Genomic Data Pipeline on AWS CDK
 
@@ -22,7 +29,6 @@ Batch-->|Runs PCA/Data Reduction|PCAReduction
 PCAReduction-->|Outputs|S3Processed
 StepFn-->|Invoke|LambdaQC
 LambdaQC-->|QC Results|S3Processed
-```
 ```
 
 ## ETL Workflow Diagram
