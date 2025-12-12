@@ -1,0 +1,1757 @@
+{
+ "Resources": {
+  "GenomicsStorageRawGenomicsBucket95F34B5B": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "helix-raw-genomics-data",
+    "LifecycleConfiguration": {
+     "Rules": [
+      {
+       "ExpirationInDays": 7,
+       "Id": "DeleteOldRawData",
+       "Status": "Enabled"
+      }
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/RawGenomicsBucket/Resource"
+   }
+  },
+  "GenomicsStorageRawGenomicsBucketPolicyA9D92B01": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GenomicsStorageRawGenomicsBucket95F34B5B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GenomicsStorageRawGenomicsBucket95F34B5B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/RawGenomicsBucket/Policy/Resource"
+   }
+  },
+  "GenomicsStorageRawGenomicsBucketAutoDeleteObjectsCustomResource8D4E5272": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+    }
+   },
+   "DependsOn": [
+    "GenomicsStorageRawGenomicsBucketPolicyA9D92B01"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/RawGenomicsBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "GenomicsStorageProcessedGenomicsBucket94E55B0A": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "helix-processed-genomics-data",
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ],
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/ProcessedGenomicsBucket/Resource"
+   }
+  },
+  "GenomicsStorageProcessedGenomicsBucketPolicy849FD9D4": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "GenomicsStorageProcessedGenomicsBucket94E55B0A"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutBucketPolicy",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GenomicsStorageProcessedGenomicsBucket94E55B0A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GenomicsStorageProcessedGenomicsBucket94E55B0A",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/ProcessedGenomicsBucket/Policy/Resource"
+   }
+  },
+  "GenomicsStorageProcessedGenomicsBucketAutoDeleteObjectsCustomResource34FB4B0D": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "GenomicsStorageProcessedGenomicsBucket94E55B0A"
+    }
+   },
+   "DependsOn": [
+    "GenomicsStorageProcessedGenomicsBucketPolicy849FD9D4"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/GenomicsStorage/ProcessedGenomicsBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
+    "aws:asset:property": "Code"
+   }
+  },
+  "BatchComputeBatchVpc8DD23248": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/Resource"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1Subnet9F139EDD": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/Subnet"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1RouteTable0E95A4B4": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/RouteTable"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1RouteTableAssociation4F60CB30": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet1RouteTable0E95A4B4"
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet1Subnet9F139EDD"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1DefaultRoute739BBC7D": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "BatchComputeBatchVpcIGW5F0F168E"
+    },
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet1RouteTable0E95A4B4"
+    }
+   },
+   "DependsOn": [
+    "BatchComputeBatchVpcVPCGW48035EFA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1EIPC079445B": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/EIP"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet1NATGateway416A27D6": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "BatchComputeBatchVpcPublicSubnet1EIPC079445B",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet1Subnet9F139EDD"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "BatchComputeBatchVpcPublicSubnet1DefaultRoute739BBC7D",
+    "BatchComputeBatchVpcPublicSubnet1RouteTableAssociation4F60CB30"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet1/NATGateway"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2Subnet42C59608": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/Subnet"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2RouteTable7AA90FDB": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/RouteTable"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2RouteTableAssociation0DD04F79": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet2RouteTable7AA90FDB"
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet2Subnet42C59608"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2DefaultRoute4C2D44BC": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "BatchComputeBatchVpcIGW5F0F168E"
+    },
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet2RouteTable7AA90FDB"
+    }
+   },
+   "DependsOn": [
+    "BatchComputeBatchVpcVPCGW48035EFA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2EIPC425ABA6": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/EIP"
+   }
+  },
+  "BatchComputeBatchVpcPublicSubnet2NATGateway99D4DF33": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "BatchComputeBatchVpcPublicSubnet2EIPC425ABA6",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet2Subnet42C59608"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2"
+     }
+    ]
+   },
+   "DependsOn": [
+    "BatchComputeBatchVpcPublicSubnet2DefaultRoute4C2D44BC",
+    "BatchComputeBatchVpcPublicSubnet2RouteTableAssociation0DD04F79"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PublicSubnet2/NATGateway"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet1SubnetF5D55E37": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1/Subnet"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet1RouteTableAFB922A8": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1/RouteTable"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet1RouteTableAssociationE1A1817D": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet1RouteTableAFB922A8"
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet1SubnetF5D55E37"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1/RouteTableAssociation"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet1DefaultRouteC56E0F6E": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet1NATGateway416A27D6"
+    },
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet1RouteTableAFB922A8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet1/DefaultRoute"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet2SubnetA799F647": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2/Subnet"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet2RouteTableF0365C38": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2/RouteTable"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet2RouteTableAssociation66B2E16C": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet2RouteTableF0365C38"
+    },
+    "SubnetId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet2SubnetA799F647"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2/RouteTableAssociation"
+   }
+  },
+  "BatchComputeBatchVpcPrivateSubnet2DefaultRoute8489DB15": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "BatchComputeBatchVpcPublicSubnet2NATGateway99D4DF33"
+    },
+    "RouteTableId": {
+     "Ref": "BatchComputeBatchVpcPrivateSubnet2RouteTableF0365C38"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/PrivateSubnet2/DefaultRoute"
+   }
+  },
+  "BatchComputeBatchVpcIGW5F0F168E": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "GenomicsPipelineStack/BatchCompute/BatchVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/IGW"
+   }
+  },
+  "BatchComputeBatchVpcVPCGW48035EFA": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "BatchComputeBatchVpcIGW5F0F168E"
+    },
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchVpc/VPCGW"
+   }
+  },
+  "BatchComputeBatchJobRoleF5D9772F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "Role for genomics pipeline batch jobs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchJobRole/Resource"
+   }
+  },
+  "BatchComputeBatchJobRoleDefaultPolicy64F9A26A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GenomicsStorageRawGenomicsBucket95F34B5B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GenomicsStorageRawGenomicsBucket95F34B5B",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "GenomicsStorageProcessedGenomicsBucket94E55B0A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "GenomicsStorageProcessedGenomicsBucket94E55B0A",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BatchComputeBatchJobRoleDefaultPolicy64F9A26A",
+    "Roles": [
+     {
+      "Ref": "BatchComputeBatchJobRoleF5D9772F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BatchJobRole/DefaultPolicy/Resource"
+   }
+  },
+  "BatchComputeFargateSpotComputeEnvSecurityGroup42B117C8": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "GenomicsPipelineStack/BatchCompute/FargateSpotComputeEnv/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "BatchComputeBatchVpc8DD23248"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/FargateSpotComputeEnv/SecurityGroup/Resource"
+   }
+  },
+  "BatchComputeFargateSpotComputeEnvBE4D93E9": {
+   "Type": "AWS::Batch::ComputeEnvironment",
+   "Properties": {
+    "ComputeResources": {
+     "MaxvCpus": 8,
+     "SecurityGroupIds": [
+      {
+       "Fn::GetAtt": [
+        "BatchComputeFargateSpotComputeEnvSecurityGroup42B117C8",
+        "GroupId"
+       ]
+      }
+     ],
+     "Subnets": [
+      {
+       "Ref": "BatchComputeBatchVpcPrivateSubnet1SubnetF5D55E37"
+      },
+      {
+       "Ref": "BatchComputeBatchVpcPrivateSubnet2SubnetA799F647"
+      }
+     ],
+     "Type": "FARGATE_SPOT"
+    },
+    "ReplaceComputeEnvironment": false,
+    "State": "ENABLED",
+    "Type": "managed",
+    "UpdatePolicy": {}
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/FargateSpotComputeEnv/Resource"
+   }
+  },
+  "BatchComputeGenomicsJobQueue6383E185": {
+   "Type": "AWS::Batch::JobQueue",
+   "Properties": {
+    "ComputeEnvironmentOrder": [
+     {
+      "ComputeEnvironment": {
+       "Fn::GetAtt": [
+        "BatchComputeFargateSpotComputeEnvBE4D93E9",
+        "ComputeEnvironmentArn"
+       ]
+      },
+      "Order": 1
+     }
+    ],
+    "Priority": 1,
+    "State": "ENABLED"
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/GenomicsJobQueue/Resource"
+   }
+  },
+  "BatchComputeBwaMemContainerExecutionRole73D7793F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BwaMemContainer/ExecutionRole/Resource"
+   }
+  },
+  "BatchComputeBwaMemContainerExecutionRoleDefaultPolicyD8F24D7B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":logs:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":log-group:/aws/batch/job:*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":repository/bwa-pipeline"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BatchComputeBwaMemContainerExecutionRoleDefaultPolicyD8F24D7B",
+    "Roles": [
+     {
+      "Ref": "BatchComputeBwaMemContainerExecutionRole73D7793F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BwaMemContainer/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "BatchComputeBwaMemJobDefCE7AC32B": {
+   "Type": "AWS::Batch::JobDefinition",
+   "Properties": {
+    "ContainerProperties": {
+     "Environment": [],
+     "ExecutionRoleArn": {
+      "Fn::GetAtt": [
+       "BatchComputeBwaMemContainerExecutionRole73D7793F",
+       "Arn"
+      ]
+     },
+     "FargatePlatformConfiguration": {},
+     "Image": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Ref": "AWS::AccountId"
+        },
+        ".dkr.ecr.",
+        {
+         "Ref": "AWS::Region"
+        },
+        ".",
+        {
+         "Ref": "AWS::URLSuffix"
+        },
+        "/bwa-pipeline:latest"
+       ]
+      ]
+     },
+     "JobRoleArn": {
+      "Fn::GetAtt": [
+       "BatchComputeBatchJobRoleF5D9772F",
+       "Arn"
+      ]
+     },
+     "NetworkConfiguration": {
+      "AssignPublicIp": "DISABLED"
+     },
+     "ReadonlyRootFilesystem": false,
+     "ResourceRequirements": [
+      {
+       "Type": "MEMORY",
+       "Value": "8192"
+      },
+      {
+       "Type": "VCPU",
+       "Value": "4"
+      }
+     ],
+     "RuntimePlatform": {}
+    },
+    "PlatformCapabilities": [
+     "FARGATE"
+    ],
+    "RetryStrategy": {},
+    "Timeout": {
+     "AttemptDurationSeconds": 14400
+    },
+    "Type": "container"
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/BwaMemJobDef/Resource"
+   }
+  },
+  "BatchComputeDataDownloadContainerExecutionRole60928B9A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/DataDownloadContainer/ExecutionRole/Resource"
+   }
+  },
+  "BatchComputeDataDownloadContainerExecutionRoleDefaultPolicy66BEA389": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":logs:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":log-group:/aws/batch/job:*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":repository/bwa-pipeline"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BatchComputeDataDownloadContainerExecutionRoleDefaultPolicy66BEA389",
+    "Roles": [
+     {
+      "Ref": "BatchComputeDataDownloadContainerExecutionRole60928B9A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/DataDownloadContainer/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "BatchComputeDataDownloadJobDefD3752553": {
+   "Type": "AWS::Batch::JobDefinition",
+   "Properties": {
+    "ContainerProperties": {
+     "Environment": [
+      {
+       "Name": "S3_BUCKET",
+       "Value": {
+        "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+       }
+      }
+     ],
+     "ExecutionRoleArn": {
+      "Fn::GetAtt": [
+       "BatchComputeDataDownloadContainerExecutionRole60928B9A",
+       "Arn"
+      ]
+     },
+     "FargatePlatformConfiguration": {},
+     "Image": {
+      "Fn::Join": [
+       "",
+       [
+        {
+         "Ref": "AWS::AccountId"
+        },
+        ".dkr.ecr.",
+        {
+         "Ref": "AWS::Region"
+        },
+        ".",
+        {
+         "Ref": "AWS::URLSuffix"
+        },
+        "/bwa-pipeline:latest"
+       ]
+      ]
+     },
+     "JobRoleArn": {
+      "Fn::GetAtt": [
+       "BatchComputeBatchJobRoleF5D9772F",
+       "Arn"
+      ]
+     },
+     "NetworkConfiguration": {
+      "AssignPublicIp": "DISABLED"
+     },
+     "ReadonlyRootFilesystem": false,
+     "ResourceRequirements": [
+      {
+       "Type": "MEMORY",
+       "Value": "2048"
+      },
+      {
+       "Type": "VCPU",
+       "Value": "1"
+      }
+     ],
+     "RuntimePlatform": {}
+    },
+    "PlatformCapabilities": [
+     "FARGATE"
+    ],
+    "RetryStrategy": {},
+    "Timeout": {
+     "AttemptDurationSeconds": 1800
+    },
+    "Type": "container"
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/BatchCompute/DataDownloadJobDef/Resource"
+   }
+  },
+  "PipelineOrchestrationGenomicsPipelineRoleD4493229": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/PipelineOrchestration/GenomicsPipeline/Role/Resource"
+   }
+  },
+  "PipelineOrchestrationGenomicsPipelineRoleDefaultPolicy9EC8D13D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "batch:SubmitJob",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":batch:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":job-definition/*"
+          ]
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "BatchComputeGenomicsJobQueue6383E185",
+          "JobQueueArn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "events:PutTargets",
+        "events:PutRule",
+        "events:DescribeRule"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":events:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":rule/StepFunctionsGetEventsForBatchJobsRule"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords",
+        "xray:GetSamplingRules",
+        "xray:GetSamplingTargets"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PipelineOrchestrationGenomicsPipelineRoleDefaultPolicy9EC8D13D",
+    "Roles": [
+     {
+      "Ref": "PipelineOrchestrationGenomicsPipelineRoleD4493229"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/PipelineOrchestration/GenomicsPipeline/Role/DefaultPolicy/Resource"
+   }
+  },
+  "PipelineOrchestrationGenomicsPipelineEC158AFD": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"DataDownload\",\"States\":{\"DataDownload\":{\"Next\":\"BwaAlignment\",\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.error\",\"Next\":\"PipelineFailed\"}],\"Type\":\"Task\",\"ResultPath\":\"$.data_download_result\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::batch:submitJob.sync\",\"Parameters\":{\"JobDefinition\":\"",
+       {
+        "Ref": "BatchComputeDataDownloadJobDefD3752553"
+       },
+       "\",\"JobName\":\"data-download\",\"JobQueue\":\"",
+       {
+        "Fn::GetAtt": [
+         "BatchComputeGenomicsJobQueue6383E185",
+         "JobQueueArn"
+        ]
+       },
+       "\",\"ContainerOverrides\":{}}},\"BwaAlignment\":{\"End\":true,\"Catch\":[{\"ErrorEquals\":[\"States.ALL\"],\"ResultPath\":\"$.error\",\"Next\":\"PipelineFailed\"}],\"Type\":\"Task\",\"ResultPath\":\"$.bwa_result\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::batch:submitJob.sync\",\"Parameters\":{\"JobDefinition\":\"",
+       {
+        "Ref": "BatchComputeBwaMemJobDefCE7AC32B"
+       },
+       "\",\"JobName\":\"bwa-alignment\",\"JobQueue\":\"",
+       {
+        "Fn::GetAtt": [
+         "BatchComputeGenomicsJobQueue6383E185",
+         "JobQueueArn"
+        ]
+       },
+       "\",\"ContainerOverrides\":{\"Environment\":[{\"Name\":\"S3_BUCKET\",\"Value\":\"",
+       {
+        "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+       },
+       "\"},{\"Name\":\"PROCESSED_BUCKET\",\"Value\":\"",
+       {
+        "Ref": "GenomicsStorageProcessedGenomicsBucket94E55B0A"
+       },
+       "\"},{\"Name\":\"INPUT_FILE\",\"Value.$\":\"$.input_key\"},{\"Name\":\"REFERENCE\",\"Value\":\"GRCh38\"},{\"Name\":\"OUTPUT_PREFIX\",\"Value.$\":\"$.sample_id\"}]}}},\"PipelineFailed\":{\"Type\":\"Fail\"}},\"TimeoutSeconds\":86400}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "PipelineOrchestrationGenomicsPipelineRoleD4493229",
+      "Arn"
+     ]
+    },
+    "TracingConfiguration": {
+     "Enabled": true
+    }
+   },
+   "DependsOn": [
+    "PipelineOrchestrationGenomicsPipelineRoleDefaultPolicy9EC8D13D",
+    "PipelineOrchestrationGenomicsPipelineRoleD4493229"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/PipelineOrchestration/GenomicsPipeline/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21S0W7CMAz8Ft5DNugXAGOISdu6MvGK0mDAK02qxAFVVf99bstakPbk8+VycS6Zymk0lZORuvqx3mfjM6ay2pDSmWBqV/lIVvOgMyCxOJgb6kpsz6jLge76WoB2MoHCeiTryrnywNRUVttCN+JtvBBxSFm7CanpfAeU2EDwrdIzDPzAzby3GhWhNb24Act13JQPRStFcFWliB1eGA7Ga0PgGP8Juklu3Yz4xqccDIkN6OCQypWzoWhnuCdqgSqXVWK7+do65PCXQKpIn2T1qtyR/Rc2L3jOpbmgs6Y9hLX/sG82/QoQWuceL7XvfQwpNOBe4IAG2xB4lZV3RLd1IGrhCYpDMLrp/I6Uz7ycNwNyNjkSqx8lzdx4FvwHCN45FT6xjeGur2uxCJ5snoC3wekuix4/LMXOXnAPrv0H/H5A7HREcxT3mz8DcRq1iEs6WfMUycmznESjH484dsEQ5iCTrv4CnhbYD7ICAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "GenomicsPipelineStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "StepFunctionArn": {
+   "Description": "Step Functions State Machine ARN",
+   "Value": {
+    "Ref": "PipelineOrchestrationGenomicsPipelineEC158AFD"
+   }
+  },
+  "RawGenomicsBucketName": {
+   "Description": "Raw Genomics S3 Bucket Name",
+   "Value": {
+    "Ref": "GenomicsStorageRawGenomicsBucket95F34B5B"
+   }
+  },
+  "ProcessedGenomicsBucketName": {
+   "Description": "Processed Genomics S3 Bucket Name",
+   "Value": {
+    "Ref": "GenomicsStorageProcessedGenomicsBucket94E55B0A"
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
